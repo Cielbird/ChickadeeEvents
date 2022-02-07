@@ -6,9 +6,6 @@
 [Bb]uilds/
 [Ll]ogs/
 
-# Text Mesh pro
-Assets/TextMesh\ Pro/
-
 # Never ignore Asset meta data
 ![Aa]ssets/**/*.meta
 
