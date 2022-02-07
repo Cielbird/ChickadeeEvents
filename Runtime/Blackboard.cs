@@ -7,7 +7,7 @@ namespace ChickadeeEvents
     [Serializable]
     public class Blackboard
     {
-        public List<Fact> facts;
+        public List<Fact> facts = new List<Fact>();
 
         public void SetFact(string key, string value)
         {

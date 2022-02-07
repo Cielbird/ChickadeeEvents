@@ -25,9 +25,9 @@ namespace ChickadeeEvents
         public event Action<EventQuery> OnCallEvent;
 
         [HideInInspector]
-        public Blackboard blackboard;
+        public Blackboard blackboard = new Blackboard();
         [HideInInspector]
-        public List<Rule> rules;
+        public List<Rule> rules = new List<Rule>();
 
         public float debugEventDelay;
 
