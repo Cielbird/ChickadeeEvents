@@ -1,0 +1,14 @@
+{
+    "name": "cielbird.chickadee_events.Editor",
+    "rootNamespace": "",
+    "references": ["cielbird.chickadee_events"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

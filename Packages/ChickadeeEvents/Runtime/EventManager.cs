@@ -43,9 +43,6 @@ namespace ChickadeeEvents
         {
             EventQuery query = new EventQuery(call.eventName, blackboard, call.eventFacts);
 
-
-
-            print(call);
             OnCallEvent.Invoke(query);
 
             foreach (Rule rule in rules)
