@@ -396,26 +396,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blackboard:
     facts: []
-  rules:
-  - eventName: This that
-    criteria:
-    - key: this
-      value: that
-    responses:
-    - eventName: 
-      eventFacts:
-      - key: sender
-        value: sdf
-    - eventName: 
-      eventFacts: []
-  - eventName: 
-    criteria: []
-    responses:
-    - eventName: 
-      eventFacts: []
-    - eventName: 
-      eventFacts: []
-  eventDelay: 2
+  rules: []
+  debugEventDelay: 2
 --- !u!4 &473853229
 Transform:
   m_ObjectHideFlags: 0
