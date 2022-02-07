@@ -1,0 +1,13 @@
+{
+  "name": "com.cielbird.chickadee_events",
+  "version": "1.0.0",
+  "displayName": "Chickadee Events",
+  "description": "A context aware event system made for writers.",
+  "unity": "2021.2",
+  "unityRelease": "8f1",
+  "author": {
+    "name": "Cielbird",
+    "email": "guilhem.ane3@gmail.com",
+    "url": "https://cielbird.github.io"
+  }
+}
