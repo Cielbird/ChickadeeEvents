@@ -14,18 +14,18 @@ namespace ChickadeeEvents
         public override VisualElement CreateInspectorGUI()
         {
             // Create a new VisualElement to be the root of our inspector UI
-            VisualElement myInspector = new VisualElement();
+            VisualElement eventInspector = new VisualElement();
 
             // Add a simple label
             Button button = new Button(() =>
             {
-                EventEditor.ShowWindow();
+                EventEditor.SetUpWindow();
             });
             button.text = "Open event editor";
-            myInspector.Add(button);
+            eventInspector.Add(button);
 
             // Return the finished inspector UI
-            return myInspector;
+            return eventInspector;
         }
     }
 }

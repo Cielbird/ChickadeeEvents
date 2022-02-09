@@ -30,6 +30,7 @@ namespace ChickadeeEvents
         public List<Rule> rules = new List<Rule>();
 
         public float debugEventDelay;
+        public List<string> debugLog = new List<string>();
 
         private void Start()
         {
@@ -37,13 +38,17 @@ namespace ChickadeeEvents
                 _current = this;
             else if (_current != this)
                 Destroy(gameObject);
+
+            CallEvent(new EventCall("on_say_dialogue", "player", "mayor"));
         }
 
         public void CallEvent(EventCall call)
         {
             EventQuery query = new EventQuery(call.eventName, blackboard, call.eventFacts);
 
-            OnCallEvent.Invoke(query);
+            debugLog.Add($"[{Time.time}] {call}");
+
+            OnCallEvent?.Invoke(query);
 
             foreach (Rule rule in rules)
             {
