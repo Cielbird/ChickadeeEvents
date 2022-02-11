@@ -51,8 +51,6 @@ namespace ChickadeeEvents
                     Rule rule = rules[index];
                     EditorGUI.LabelField(rect, rule.eventName);
                 };
-            ruleList.onChangedCallback = (e) => UpdateSelected(ruleList, out selectedRule);
-            ruleList.onSelectCallback = (e) => UpdateSelected(ruleList, out selectedRule);
 
 
             criteriaList = new ReorderableList(null,
@@ -72,8 +70,6 @@ namespace ChickadeeEvents
                     EventCall response = (EventCall)responseList.list[index];
                     DrawResponse(rect, response);
                 };
-            responseList.onChangedCallback = (e) => UpdateSelected(responseList, out selectedResponse);
-            responseList.onSelectCallback = (e) => UpdateSelected(responseList, out selectedResponse);
 
             responseFactList = new ReorderableList(null,
                 typeof(Fact), true, false, true, true);
@@ -86,8 +82,6 @@ namespace ChickadeeEvents
 
             debugLogList = new ReorderableList(eventManager.debugLog,
                                 typeof(EventCall), false, false, false, false);
-            debugLogList.onChangedCallback = (e) => UpdateSelected(debugLogList, out selectedCall);
-            debugLogList.onSelectCallback = (e) => UpdateSelected(debugLogList, out selectedCall);
 
             setup = true;
         }
@@ -109,6 +103,11 @@ namespace ChickadeeEvents
                     return;
                 }
             }
+
+            //update selected
+            UpdateSelected(ruleList, out selectedRule);
+            UpdateSelected(responseList, out selectedResponse);
+            UpdateSelected(debugLogList, out selectedCall);
 
             List<Rule> rules = eventManager.rules;
 
@@ -196,10 +195,20 @@ namespace ChickadeeEvents
             {
                 if (responseFactList.list != selectedResponse.eventFacts)
                     responseFactList.list = selectedResponse.eventFacts;
-                GUILayout.BeginHorizontal();
-                GUILayout.Label("event to trigger: ");
-                selectedResponse.EventName = GUILayout.TextField(selectedResponse.EventName);
-                GUILayout.EndHorizontal();
+
+                if (selectedResponse.eventFacts.GetValue("event_name") == null)
+                {
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label("event_name not found!");
+                    if(GUILayout.Button("Add event_name"))
+                    {
+                        Fact fact = new Fact("event_name", "untitled_event");
+                        selectedResponse.eventFacts.Add(fact);
+                    }
+                    GUILayout.EndHorizontal();
+                }
+                
+
                 responseFactList.DoLayoutList();
             }
         }
