@@ -39,7 +39,7 @@ namespace ChickadeeEvents
             Fact fact = GetFact(key);
             if (fact == null)
             {
-                Debug.LogWarning($"Fact with key \"{key}\" not found!");
+                UnityEngine.Debug.LogWarning($"Fact with key \"{key}\" not found!");
                 return null;
             }
             return fact.value;

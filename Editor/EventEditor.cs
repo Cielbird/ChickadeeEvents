@@ -13,11 +13,14 @@ namespace ChickadeeEvents
 
         Rule selectedRule = null;
         EventCall selectedResponse = null;
+        EventCall selectedCall = null;
         bool debugExpanded = false;
         ReorderableList ruleList;
         ReorderableList criteriaList;
         ReorderableList responseList;
         ReorderableList responseFactList;
+        ReorderableList debugLogList;
+
         bool setup = false;
 
         [MenuItem("Chickadee/Event Editor")]
@@ -48,8 +51,8 @@ namespace ChickadeeEvents
                     Rule rule = rules[index];
                     EditorGUI.LabelField(rect, rule.eventName);
                 };
-            ruleList.onChangedCallback = UpdateSelectedRule;
-            ruleList.onSelectCallback = UpdateSelectedRule;
+            ruleList.onChangedCallback = (e) => UpdateSelected(ruleList, out selectedRule);
+            ruleList.onSelectCallback = (e) => UpdateSelected(ruleList, out selectedRule);
 
 
             criteriaList = new ReorderableList(null,
@@ -69,8 +72,8 @@ namespace ChickadeeEvents
                     EventCall response = (EventCall)responseList.list[index];
                     DrawResponse(rect, response);
                 };
-            responseList.onChangedCallback = UpdateSelectedResponse;
-            responseList.onSelectCallback = UpdateSelectedResponse;
+            responseList.onChangedCallback = (e) => UpdateSelected(responseList, out selectedResponse);
+            responseList.onSelectCallback = (e) => UpdateSelected(responseList, out selectedResponse);
 
             responseFactList = new ReorderableList(null,
                 typeof(Fact), true, false, true, true);
@@ -79,6 +82,12 @@ namespace ChickadeeEvents
                 {
                     DrawFact(rect, (Fact)responseFactList.list[index], "response" + index);
                 };
+
+
+            debugLogList = new ReorderableList(eventManager.debugLog,
+                                typeof(EventCall), false, false, false, false);
+            debugLogList.onChangedCallback = (e) => UpdateSelected(debugLogList, out selectedCall);
+            debugLogList.onSelectCallback = (e) => UpdateSelected(debugLogList, out selectedCall);
 
             setup = true;
         }
@@ -114,12 +123,20 @@ namespace ChickadeeEvents
             if(debugExpanded)
             {
                 GUILayout.Label("Event log");
-                var logList = new ReorderableList(eventManager.debugLog,
-                                    typeof(string), false, false, false, false);
-                logList.DoLayoutList();
+
+                debugLogList.DoLayoutList();
+
+                if(selectedCall != null)
+                {
+                    GUILayout.Label(selectedCall.EventName);
+                    GUILayout.Label($"from:\n\t{selectedCall.Sender}\n" +
+                                    $"to:\n\t{selectedCall.Target}\n" +
+                                    $"called by:\n\t{selectedCall.caller}\n");
+                }
+
+                DrawBlackboard(eventManager);
             }
 
-            DrawBlackboard(eventManager);
 
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
@@ -137,28 +154,17 @@ namespace ChickadeeEvents
 
         }
 
-        void UpdateSelectedRule(ReorderableList list)
+        void UpdateSelected<T>(ReorderableList list, out T selectedVar)
         {
+            selectedVar = default(T);
             if (list.selectedIndices.Count == 0)
                 return;
 
             int firstSelected = list.selectedIndices[0];
             if (list.list.Count > firstSelected)
-                selectedRule = (Rule)list.list[firstSelected];
+                selectedVar = (T)list.list[firstSelected];
             else
-                selectedRule = null;
-        }
-
-        void UpdateSelectedResponse(ReorderableList list)
-        {
-            if (list.selectedIndices.Count == 0)
-                return;
-
-            int firstSelected = list.selectedIndices[0];
-            if (list.list.Count > firstSelected)
-                selectedResponse = (EventCall)list.list[firstSelected];
-            else
-                selectedResponse = null;
+                selectedVar = default(T);
         }
 
         public void DrawRule(Rule rule, EventCall selectedResponse)
@@ -192,7 +198,7 @@ namespace ChickadeeEvents
                     responseFactList.list = selectedResponse.eventFacts;
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("event to trigger: ");
-                selectedResponse.eventName = GUILayout.TextField(selectedResponse.eventName);
+                selectedResponse.EventName = GUILayout.TextField(selectedResponse.EventName);
                 GUILayout.EndHorizontal();
                 responseFactList.DoLayoutList();
             }

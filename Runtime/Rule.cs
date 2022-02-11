@@ -30,7 +30,7 @@ namespace ChickadeeEvents
 
         public Rule()
         {
-            eventName = "";
+            eventName = "untitled_event";
             criteria = new List<Fact>();
             responses = new List<EventCall>();
         }

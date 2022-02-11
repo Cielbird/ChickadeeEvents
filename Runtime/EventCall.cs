@@ -1,14 +1,24 @@
 ﻿using System.Collections.Generic;
-using System;
+using UnityEngine;
 
 namespace ChickadeeEvents
 {
-    [Serializable]
+    [System.Serializable]
     public class EventCall
     {
-        public string eventName;
         public List<Fact> eventFacts;
 
+        public string EventName
+        {
+            get
+            {
+                return eventFacts.GetValue("event_name");
+            }
+            set
+            {
+                eventFacts.SetValue("event_name", value);
+            }
+        }
         public string Sender
         {
             get
@@ -32,10 +42,12 @@ namespace ChickadeeEvents
             }
         }
 
+        public Object caller;
+
         public EventCall()
         {
-            eventName = "";
             eventFacts = new List<Fact>();
+            EventName = "untitled_event";
         }
 
         /// <summary>
@@ -43,7 +55,6 @@ namespace ChickadeeEvents
         /// </summary>
         public EventCall(EventCall call)
         {
-            eventName = call.eventName;
             eventFacts = new List<Fact>();
             foreach(Fact otherFact in call.eventFacts)
             {
@@ -51,23 +62,37 @@ namespace ChickadeeEvents
             }
         }
 
-        public EventCall(string eventName, List<Fact> eventFacts)
+        public EventCall(string eventName, List<Fact> otherEventFacts = null,
+                         Object caller = null)
         {
-            this.eventName = eventName;
-            this.eventFacts = eventFacts;
+            eventFacts = new List<Fact>();
+            EventName = eventName;
+            if(otherEventFacts != null)
+            {
+                foreach (Fact f in otherEventFacts)
+                    eventFacts.Add(f);
+            }
+            this.caller = caller;
         }
 
-        public EventCall(string eventName, string sender = "", string target = "")
+        public EventCall(string eventName, List<Fact> otherEventFacts = null,
+                         string sender = null, string target = null,
+                         Object caller = null)
+                            : this(eventName, otherEventFacts, caller)
         {
-            this.eventName = eventName;
-            eventFacts = new List<Fact>();
             Sender = sender;
             Target = target;
         }
 
+        public EventCall(string eventName, string sender = null,
+                         string target = null,
+                         Object caller = null)
+                            : this(eventName, null, sender, target, caller) { }
+
+
         public override string ToString()
         {
-            return $"{eventName} ({Sender} -> {Target})";
+            return $"{EventName} ({Sender} -> {Target})";
         }
     }
 }
