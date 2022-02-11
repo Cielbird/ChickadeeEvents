@@ -42,8 +42,6 @@ namespace ChickadeeEvents
             }
         }
 
-        public Object caller;
-
         public EventCall()
         {
             eventFacts = new List<Fact>();
@@ -62,8 +60,7 @@ namespace ChickadeeEvents
             }
         }
 
-        public EventCall(string eventName, List<Fact> otherEventFacts = null,
-                         Object caller = null)
+        public EventCall(string eventName, List<Fact> otherEventFacts = null)
         {
             eventFacts = new List<Fact>();
             EventName = eventName;
@@ -72,22 +69,19 @@ namespace ChickadeeEvents
                 foreach (Fact f in otherEventFacts)
                     eventFacts.Add(f);
             }
-            this.caller = caller;
         }
 
         public EventCall(string eventName, List<Fact> otherEventFacts = null,
-                         string sender = null, string target = null,
-                         Object caller = null)
-                            : this(eventName, otherEventFacts, caller)
+                         string sender = null, string target = null)
+                            : this(eventName, otherEventFacts)
         {
             Sender = sender;
             Target = target;
         }
 
         public EventCall(string eventName, string sender = null,
-                         string target = null,
-                         Object caller = null)
-                            : this(eventName, null, sender, target, caller) { }
+                         string target = null)
+                            : this(eventName, null, sender, target) { }
 
 
         public override string ToString()

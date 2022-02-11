@@ -1,6 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using ChickadeeEvents.Debug;
 using UnityEngine;
 
 namespace ChickadeeEvents
@@ -22,7 +22,7 @@ namespace ChickadeeEvents
             }
         }
 
-        public event Action<EventQuery> OnCallEvent;
+        public event System.Action<EventQuery> OnCallEvent;
 
         [HideInInspector]
         public Blackboard blackboard = new Blackboard();
@@ -30,7 +30,7 @@ namespace ChickadeeEvents
         public List<Rule> rules = new List<Rule>();
 
         public float debugEventDelay;
-        public List<EventCall> debugLog = new List<EventCall>();
+        public List<EventCallInfo> debugLog = new List<EventCallInfo>();
 
         private void Start()
         {
@@ -40,11 +40,11 @@ namespace ChickadeeEvents
                 Destroy(gameObject);
         }
 
-        public void CallEvent(EventCall call)
+        public void CallEvent(EventCall call, Object caller)
         {
             EventQuery query = new EventQuery(call.EventName, blackboard, call.eventFacts);
 
-            debugLog.Add(call);
+            debugLog.Add(new EventCallInfo(call, caller, Time.time));
 
             OnCallEvent?.Invoke(query);
 
@@ -62,18 +62,18 @@ namespace ChickadeeEvents
                         }
                         EventCall derefedCall = new EventCall(
                                         query.Deref(response.EventName),
-                                        derefedFacts, this);
+                                        derefedFacts);
 
-                        StartCoroutine(CallEventCoroutine(derefedCall));
+                        StartCoroutine(CallEventCoroutine(derefedCall, caller));
                     }
                 }
             }
         }
 
-        IEnumerator CallEventCoroutine(EventCall call)
+        IEnumerator CallEventCoroutine(EventCall call, Object caller)
         {
             yield return new WaitForSeconds(debugEventDelay);
-            CallEvent(call);
+            CallEvent(call, caller);
         }
 
         /// <summary>

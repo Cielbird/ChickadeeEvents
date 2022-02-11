@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using UnityEditorInternal;
 using ChickadeeEvents;
+using ChickadeeEvents.Debug;
 
 namespace ChickadeeEvents
 {
@@ -13,13 +14,14 @@ namespace ChickadeeEvents
 
         Rule selectedRule = null;
         EventCall selectedResponse = null;
-        EventCall selectedCall = null;
+        EventCallInfo selectedCallInfo = null;
         bool debugExpanded = false;
         ReorderableList ruleList;
         ReorderableList criteriaList;
         ReorderableList responseList;
         ReorderableList responseFactList;
         ReorderableList debugLogList;
+        Vector2 debugScrollPos;
 
         bool setup = false;
 
@@ -107,50 +109,55 @@ namespace ChickadeeEvents
             //update selected
             UpdateSelected(ruleList, out selectedRule);
             UpdateSelected(responseList, out selectedResponse);
-            UpdateSelected(debugLogList, out selectedCall);
+            UpdateSelected(debugLogList, out selectedCallInfo);
 
             List<Rule> rules = eventManager.rules;
 
             EditorGUILayout.BeginHorizontal();
 
             EditorGUILayout.BeginVertical(GUILayout.Width(300));
-            EditorGUILayout.BeginScrollView(Vector2.zero);
 
             ruleList.DoLayoutList();
 
             debugExpanded = EditorGUILayout.Foldout(debugExpanded, "Debug:");
             if(debugExpanded)
             {
-                GUILayout.Label("Event log");
-
-                debugLogList.DoLayoutList();
-
-                if(selectedCall != null)
-                {
-                    GUILayout.Label(selectedCall.EventName);
-                    GUILayout.Label($"from:\n\t{selectedCall.Sender}\n" +
-                                    $"to:\n\t{selectedCall.Target}\n" +
-                                    $"called by:\n\t{selectedCall.caller}\n");
-                }
-
-                DrawBlackboard(eventManager);
+                DrawDebug();
             }
 
-
-            EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
 
-            EditorGUILayout.BeginVertical(GUILayout.Width(300));
-            EditorGUILayout.BeginScrollView(Vector2.zero);
-
+            EditorGUILayout.BeginVertical();
 
             DrawRule(selectedRule, selectedResponse);
 
-            EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.EndHorizontal();
 
+        }
+
+        private void DrawDebug()
+        {
+            debugScrollPos = GUILayout.BeginScrollView(debugScrollPos);
+
+            GUILayout.Label("Event log");
+
+            debugLogList.DoLayoutList();
+
+            if (selectedCallInfo != null)
+            {
+                GUILayout.Label("Facts:");
+                foreach (Fact fact in selectedCallInfo.call.eventFacts)
+                {
+                    GUILayout.Label($"{fact.key}: {fact.value}");
+                }
+                GUILayout.Label($"\ncaller: {selectedCallInfo.caller}");
+            }
+
+            DrawBlackboard(eventManager);
+
+            GUILayout.EndScrollView();
         }
 
         void UpdateSelected<T>(ReorderableList list, out T selectedVar)
