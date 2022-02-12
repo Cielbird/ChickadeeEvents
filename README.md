@@ -1,6 +1,6 @@
 # ChickadeeEvents
 
-A context aware event system in Unity 3D.
+A context aware event system package in Unity 3D.
 
 Primarily usefull for writing AI behaviour and dialogue. 
 
