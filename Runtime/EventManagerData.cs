@@ -13,13 +13,14 @@ namespace ChickadeeEvents
     [CreateAssetMenu(fileName = "EventManagerData", menuName = "ChickadeeEvents/EventManagerData", order = 1)]
     public class EventManagerData : ScriptableObject
     {
-        [System.NonSerialized]
-        public Blackboard blackboard = new Blackboard();
-        [System.NonSerialized]
-        public List<IRuleCollection> ruleCollections = new();
-        [System.NonSerialized]
-        public ChickadeeTest test = new ChickadeeTest();
+        public Blackboard blackboard;
+        public List<RuleList> ruleCollections;
 
-        public List<EventCallInfo> debugLog = new List<EventCallInfo>();
+        private void Awake()
+        {
+            blackboard = new Blackboard();
+            ruleCollections = new List<RuleList>();
+            ruleCollections.Add(new RuleList("Main rules"));
+        }
     }
 }

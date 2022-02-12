@@ -16,10 +16,13 @@ namespace ChickadeeEvents
             // Create a new VisualElement to be the root of our inspector UI
             VisualElement eventInspector = new VisualElement();
 
+            var dataField = new PropertyField(serializedObject.FindProperty("data"));
+            eventInspector.Add(dataField);
+
             // Add a simple label
             Button button = new Button(() =>
             {
-                EventEditor.SetUpWindow();
+                EventEditor.SetUpWindow((EventManagerData)serializedObject.FindProperty("data").objectReferenceValue);
             });
             button.text = "Open event editor";
             eventInspector.Add(button);

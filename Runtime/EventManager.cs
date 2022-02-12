@@ -47,9 +47,9 @@ namespace ChickadeeEvents
 
             OnCallEvent?.Invoke(query);
 
-            foreach(IRuleCollection ruleCollection in data.ruleCollections)
+            foreach(RuleList ruleCollection in data.ruleCollections)
             {
-                foreach (Rule rule in ruleCollection.GetRules())
+                foreach (Rule rule in ruleCollection.rules)
                 {
                     if (query.MatchesRule(rule))
                     {

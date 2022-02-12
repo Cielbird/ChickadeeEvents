@@ -10,13 +10,14 @@ namespace ChickadeeEvents
 {
     class EventEditor : EditorWindow
     {
-        EventManager eventManager;
+        EventManagerData data;
 
-        IRuleCollection selectedRuleCol = null;
+        RuleList selectedRuleList = null;
         Rule selectedRule = null;
         EventCall selectedResponse = null;
         EventCallInfo selectedCallInfo = null;
         bool debugExpanded = false;
+
         ReorderableList ruleCollectionList;
         ReorderableList ruleList;
         ReorderableList criteriaList;
@@ -24,106 +25,114 @@ namespace ChickadeeEvents
         ReorderableList responseFactList;
         ReorderableList debugLogList;
         Vector2 debugScrollPos;
-        string test;
 
+        List<EventCallInfo> debugLog = new List<EventCallInfo>();
+        
         [MenuItem("Chickadee/Event Editor")]
         public static void SetUpWindow()
         {
-            EventEditor editor = (EventEditor)GetWindow(typeof(EventEditor));
-            editor.SetUp();
+            SetUpWindow(null);
         }
 
-        private void Awake()
+        public static void SetUpWindow(EventManagerData data)
         {
-            SetUp();
+            EventEditor editor = (EventEditor)GetWindow(typeof(EventEditor));
+            editor.data = data;
+            editor.SetUp();
         }
 
         private void SetUp()
         {
-            eventManager = FindObjectOfType<EventManager>();
-            if (eventManager == null || eventManager.data == null) 
-                return;
-
-            ruleCollectionList = new ReorderableList(eventManager.data.ruleCollections,
-                typeof(Rule), true, false, true, true);
-            ruleCollectionList.drawElementCallback =
-                (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    var ruleCol = (IRuleCollection)ruleCollectionList.list[index];
-                    EditorGUI.LabelField(rect, ruleCol.Name);
-                };
-            ruleCollectionList.onAddCallback = (e) =>
+            if (data == null)
             {
-                e.list.Add(new RuleList("Untitled rule list"));
-            };
+                UnityEngine.Debug.Log("data is null! cannot set up editor.");
+                return;
+            }
 
-            ruleList = new ReorderableList(null,
-                typeof(Rule), true, false, true, true);
-            ruleList.drawElementCallback =
-                (Rect rect, int index, bool isActive, bool isFocused) =>
+            if(ruleCollectionList == null)
+            {
+                ruleCollectionList = new ReorderableList(data.ruleCollections,
+                    typeof(Rule), true, false, true, true);
+                ruleCollectionList.drawElementCallback =
+                    (Rect rect, int index, bool isActive, bool isFocused) =>
+                    {
+                        var ruleCol = (RuleList)ruleCollectionList.list[index];
+                        EditorGUI.LabelField(rect, ruleCol.name);
+                    };
+                ruleCollectionList.onAddCallback = (e) =>
                 {
-                    Rule rule = selectedRuleCol.GetRules()[index];
-                    EditorGUI.LabelField(rect, rule.eventName);
+                    e.list.Add(new RuleList("Untitled rule list"));
                 };
+            }
+
+            if(ruleList == null)
+            {
+                ruleList = new ReorderableList(null,
+                    typeof(Rule), true, false, true, true);
+                ruleList.drawElementCallback =
+                    (Rect rect, int index, bool isActive, bool isFocused) =>
+                    {
+                        Rule rule = selectedRuleList.rules[index];
+                        EditorGUI.LabelField(rect, rule.eventName);
+                    };
+            }
+
+            if(criteriaList == null)
+            {
+                criteriaList = new ReorderableList(null,
+                    typeof(Fact), true, false, true, true);
+                criteriaList.drawElementCallback =
+                    (Rect rect, int index, bool isActive, bool isFocused) =>
+                    {
+                        DrawFact(rect, (Fact)criteriaList.list[index], "criteria" + index);
+                    };
+
+            }
+
+            if(responseList == null)
+            {
+                responseList = new ReorderableList(null,
+                    typeof(EventCall), true, false, true, true);
+                responseList.drawElementCallback =
+                    (Rect rect, int index, bool isActive, bool isFocused) =>
+                    {
+                        EventCall response = (EventCall)responseList.list[index];
+                        DrawResponse(rect, response);
+                    };
+            }
+
+            if(responseFactList == null)
+            {
+                responseFactList = new ReorderableList(null,
+                    typeof(Fact), true, false, true, true);
+                responseFactList.drawElementCallback =
+                    (Rect rect, int index, bool isActive, bool isFocused) =>
+                    {
+                        DrawFact(rect, (Fact)responseFactList.list[index], "response" + index);
+                    };
 
 
-            criteriaList = new ReorderableList(null,
-                typeof(Fact), true, false, true, true);
-            criteriaList.drawElementCallback =
-                (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    DrawFact(rect, (Fact)criteriaList.list[index], "criteria" + index);
-                };
-
-
-            responseList = new ReorderableList(null,
-                typeof(EventCall), true, false, true, true);
-            responseList.drawElementCallback =
-                (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    EventCall response = (EventCall)responseList.list[index];
-                    DrawResponse(rect, response);
-                };
-
-            responseFactList = new ReorderableList(null,
-                typeof(Fact), true, false, true, true);
-            responseFactList.drawElementCallback =
-                (Rect rect, int index, bool isActive, bool isFocused) =>
-                {
-                    DrawFact(rect, (Fact)responseFactList.list[index], "response" + index);
-                };
-
-
-            debugLogList = new ReorderableList(eventManager.debugLog,
-                                typeof(EventCall), false, false, false, false);
+                debugLogList = new ReorderableList(debugLog,
+                                    typeof(EventCall), false, false, false, false);
+            }
         }
 
         void OnGUI()
         {
-            if (eventManager == null)
+            SetUp();
+
+            data = (EventManagerData) EditorGUILayout.ObjectField(data, typeof(EventManagerData), false);
+
+            if (data == null)
             {
-                // idk why but this works
-                SetUp();
-                if (eventManager == null)
-                {
-                    GUILayout.Label("EventManager not found in the scene!");
-                    if (GUILayout.Button("Spawn new"))
-                    {
-                        Instantiate(new GameObject("EventManager", typeof(EventManager)));
-                        SetUpWindow();
-                    }
-                    return;
-                }
+                GUILayout.Label("Select or create an EventManagerData asset");
+                return;
             }
 
-            eventManager.data = (EventManagerData) EditorGUILayout.ObjectField(eventManager.data, typeof(EventManagerData), false);
-
-            if (eventManager.data == null)
-                return;
 
 
             //update selected
-            UpdateSelected(ruleCollectionList, out selectedRuleCol);
+            UpdateSelected(ruleCollectionList, out selectedRuleList);
             UpdateSelected(ruleList, out selectedRule);
             UpdateSelected(responseList, out selectedResponse);
             UpdateSelected(debugLogList, out selectedCallInfo);
@@ -136,11 +145,11 @@ namespace ChickadeeEvents
 
             EditorGUILayout.BeginVertical(GUILayout.Width(300));
 
-            if(selectedRuleCol != null)
+            if(selectedRuleList != null)
             {
                 GUILayout.Label("Rule list name:");
-                selectedRuleCol.Name = GUILayout.TextField(selectedRuleCol.Name);
-                List<Rule> rules = selectedRuleCol.GetRules();
+                selectedRuleList.name = GUILayout.TextField(selectedRuleList.name);
+                List<Rule> rules = selectedRuleList.rules;
                 if (ruleList.list != rules)
                     ruleList.list = rules;
                 ruleList.DoLayoutList();
@@ -162,6 +171,10 @@ namespace ChickadeeEvents
 
             EditorGUILayout.EndHorizontal();
 
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(data);
+            }
         }
 
         private void DrawDebug()
@@ -188,6 +201,11 @@ namespace ChickadeeEvents
         void UpdateSelected<T>(ReorderableList list, out T selectedVar)
         {
             selectedVar = default(T);
+            if(list == null)
+            {
+                UnityEngine.Debug.LogWarning("ReorderableList is null!");
+                return;
+            }
             if (list.selectedIndices.Count == 0)
                 return;
 
