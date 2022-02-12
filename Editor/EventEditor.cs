@@ -12,18 +12,19 @@ namespace ChickadeeEvents
     {
         EventManager eventManager;
 
+        IRuleCollection selectedRuleCol = null;
         Rule selectedRule = null;
         EventCall selectedResponse = null;
         EventCallInfo selectedCallInfo = null;
         bool debugExpanded = false;
+        ReorderableList ruleCollectionList;
         ReorderableList ruleList;
         ReorderableList criteriaList;
         ReorderableList responseList;
         ReorderableList responseFactList;
         ReorderableList debugLogList;
         Vector2 debugScrollPos;
-
-        bool setup = false;
+        string test;
 
         [MenuItem("Chickadee/Event Editor")]
         public static void SetUpWindow()
@@ -40,17 +41,28 @@ namespace ChickadeeEvents
         private void SetUp()
         {
             eventManager = FindObjectOfType<EventManager>();
-            if (eventManager == null)
+            if (eventManager == null || eventManager.data == null) 
                 return;
 
-            List<Rule> rules = eventManager.rules;
+            ruleCollectionList = new ReorderableList(eventManager.data.ruleCollections,
+                typeof(Rule), true, false, true, true);
+            ruleCollectionList.drawElementCallback =
+                (Rect rect, int index, bool isActive, bool isFocused) =>
+                {
+                    var ruleCol = (IRuleCollection)ruleCollectionList.list[index];
+                    EditorGUI.LabelField(rect, ruleCol.Name);
+                };
+            ruleCollectionList.onAddCallback = (e) =>
+            {
+                e.list.Add(new RuleList("Untitled rule list"));
+            };
 
-            ruleList = new ReorderableList(rules,
+            ruleList = new ReorderableList(null,
                 typeof(Rule), true, false, true, true);
             ruleList.drawElementCallback =
                 (Rect rect, int index, bool isActive, bool isFocused) =>
                 {
-                    Rule rule = rules[index];
+                    Rule rule = selectedRuleCol.GetRules()[index];
                     EditorGUI.LabelField(rect, rule.eventName);
                 };
 
@@ -84,8 +96,6 @@ namespace ChickadeeEvents
 
             debugLogList = new ReorderableList(eventManager.debugLog,
                                 typeof(EventCall), false, false, false, false);
-
-            setup = true;
         }
 
         void OnGUI()
@@ -106,18 +116,35 @@ namespace ChickadeeEvents
                 }
             }
 
+            eventManager.data = (EventManagerData) EditorGUILayout.ObjectField(eventManager.data, typeof(EventManagerData), false);
+
+            if (eventManager.data == null)
+                return;
+
+
             //update selected
+            UpdateSelected(ruleCollectionList, out selectedRuleCol);
             UpdateSelected(ruleList, out selectedRule);
             UpdateSelected(responseList, out selectedResponse);
             UpdateSelected(debugLogList, out selectedCallInfo);
 
-            List<Rule> rules = eventManager.rules;
+
+            GUILayout.Label("Rule lists:");
+            ruleCollectionList.DoLayoutList();
 
             EditorGUILayout.BeginHorizontal();
 
             EditorGUILayout.BeginVertical(GUILayout.Width(300));
 
-            ruleList.DoLayoutList();
+            if(selectedRuleCol != null)
+            {
+                GUILayout.Label("Rule list name:");
+                selectedRuleCol.Name = GUILayout.TextField(selectedRuleCol.Name);
+                List<Rule> rules = selectedRuleCol.GetRules();
+                if (ruleList.list != rules)
+                    ruleList.list = rules;
+                ruleList.DoLayoutList();
+            }
 
             debugExpanded = EditorGUILayout.Foldout(debugExpanded, "Debug:");
             if(debugExpanded)
@@ -154,8 +181,6 @@ namespace ChickadeeEvents
                 }
                 GUILayout.Label($"\ncaller: {selectedCallInfo.caller}");
             }
-
-            DrawBlackboard(eventManager);
 
             GUILayout.EndScrollView();
         }
@@ -250,25 +275,6 @@ namespace ChickadeeEvents
             }
 
             GUI.Label(rect, response.ToString());
-        }
-
-
-        private void DrawBlackboard(EventManager eventManager)
-        {
-            EditorGUILayout.BeginScrollView(Vector2.zero);
-            foreach (Fact fact in eventManager.blackboard.facts)
-            {
-                GUILayout.Label(fact.ToString());
-            }
-
-            foreach (Rule rule in eventManager.rules)
-            {
-                foreach (Fact fact in rule.criteria)
-                {
-                    GUILayout.Label(fact.key);
-                }
-            }
-            EditorGUILayout.EndScrollView();
         }
     }
 }

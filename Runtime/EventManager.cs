@@ -24,10 +24,7 @@ namespace ChickadeeEvents
 
         public event System.Action<EventQuery> OnCallEvent;
 
-        [HideInInspector]
-        public Blackboard blackboard = new Blackboard();
-        [HideInInspector]
-        public List<Rule> rules = new List<Rule>();
+        public EventManagerData data;
 
         public float debugEventDelay;
         public List<EventCallInfo> debugLog = new List<EventCallInfo>();
@@ -38,33 +35,38 @@ namespace ChickadeeEvents
                 _current = this;
             else if (_current != this)
                 Destroy(gameObject);
+
+            DontDestroyOnLoad(gameObject);
         }
 
         public void CallEvent(EventCall call, Object caller)
         {
-            EventQuery query = new EventQuery(call.EventName, blackboard, call.eventFacts);
+            EventQuery query = new EventQuery(call.EventName, data.blackboard, call.eventFacts);
 
             debugLog.Add(new EventCallInfo(call, caller, Time.time));
 
             OnCallEvent?.Invoke(query);
 
-            foreach (Rule rule in rules)
+            foreach(IRuleCollection ruleCollection in data.ruleCollections)
             {
-                if (query.MatchesRule(rule))
+                foreach (Rule rule in ruleCollection.GetRules())
                 {
-                    // responses
-                    foreach (var response in rule.responses)
+                    if (query.MatchesRule(rule))
                     {
-                        List<Fact> derefedFacts = new List<Fact>();
-                        foreach (Fact f in response.eventFacts)
+                        // responses
+                        foreach (var response in rule.responses)
                         {
-                            derefedFacts.Add(new Fact(f.key, query.Deref(f.value)));
-                        }
-                        EventCall derefedCall = new EventCall(
-                                        query.Deref(response.EventName),
-                                        derefedFacts);
+                            List<Fact> derefedFacts = new List<Fact>();
+                            foreach (Fact f in response.eventFacts)
+                            {
+                                derefedFacts.Add(new Fact(f.key, query.Deref(f.value)));
+                            }
+                            EventCall derefedCall = new EventCall(
+                                            query.Deref(response.EventName),
+                                            derefedFacts);
 
-                        StartCoroutine(CallEventCoroutine(derefedCall, caller));
+                            StartCoroutine(CallEventCoroutine(derefedCall, caller));
+                        }
                     }
                 }
             }
@@ -81,7 +83,7 @@ namespace ChickadeeEvents
         /// </summary>
         public string GetFactVal(string key)
         {
-            return blackboard.facts.GetValue(key);
+            return data.blackboard.facts.GetValue(key);
         }
 
         /// <summary>
@@ -89,7 +91,7 @@ namespace ChickadeeEvents
         /// </summary>
         public void SetFactVal(string key, string value)
         {
-            blackboard.facts.SetValue(key, value);
+            data.blackboard.facts.SetValue(key, value);
         }
     }
 
