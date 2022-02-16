@@ -15,8 +15,6 @@ namespace ChickadeeEvents
                 if (_current == null)
                 {
                     _current = FindObjectOfType<EventManager>();
-                    if (_current == null)
-                        UnityEngine.Debug.LogWarning("EventManager not found in scene!");
                 }
                 return _current;
             }

@@ -44,10 +44,7 @@ namespace ChickadeeEvents
         private void SetUp()
         {
             if (data == null)
-            {
-                UnityEngine.Debug.Log("data is null! cannot set up editor.");
                 return;
-            }
 
             if(ruleCollectionList == null)
             {
@@ -119,17 +116,15 @@ namespace ChickadeeEvents
 
         void OnGUI()
         {
-            SetUp();
+            data = (EventManagerData)EditorGUILayout.ObjectField(data, typeof(EventManagerData), false);
 
-            data = (EventManagerData) EditorGUILayout.ObjectField(data, typeof(EventManagerData), false);
+            SetUp();
 
             if (data == null)
             {
                 GUILayout.Label("Select or create an EventManagerData asset");
                 return;
             }
-
-
 
             //update selected
             UpdateSelected(ruleCollectionList, out selectedRuleList);
@@ -141,35 +136,7 @@ namespace ChickadeeEvents
             GUILayout.Label("Rule lists:");
             ruleCollectionList.DoLayoutList();
 
-            EditorGUILayout.BeginHorizontal();
-
-            EditorGUILayout.BeginVertical(GUILayout.Width(300));
-
-            if(selectedRuleList != null)
-            {
-                GUILayout.Label("Rule list name:");
-                selectedRuleList.name = GUILayout.TextField(selectedRuleList.name);
-                List<Rule> rules = selectedRuleList.rules;
-                if (ruleList.list != rules)
-                    ruleList.list = rules;
-                ruleList.DoLayoutList();
-            }
-
-            debugExpanded = EditorGUILayout.Foldout(debugExpanded, "Debug:");
-            if(debugExpanded)
-            {
-                DrawDebug();
-            }
-
-            EditorGUILayout.EndVertical();
-
-            EditorGUILayout.BeginVertical();
-
-            DrawRule(selectedRule, selectedResponse);
-
-            EditorGUILayout.EndVertical();
-
-            EditorGUILayout.EndHorizontal();
+            DrawRuleList(selectedRuleList);
 
             if (GUI.changed)
             {
@@ -214,6 +181,40 @@ namespace ChickadeeEvents
                 selectedVar = (T)list.list[firstSelected];
             else
                 selectedVar = default(T);
+        }
+
+        public void DrawRuleList(RuleList list)
+        {
+
+            EditorGUILayout.BeginHorizontal();
+
+            EditorGUILayout.BeginVertical(GUILayout.Width(300));
+
+            if (selectedRuleList != null)
+            {
+                GUILayout.Label("Rule list name:");
+                selectedRuleList.name = GUILayout.TextField(selectedRuleList.name);
+                List<Rule> rules = selectedRuleList.rules;
+                if (ruleList.list != rules)
+                    ruleList.list = rules;
+                ruleList.DoLayoutList();
+            }
+
+            debugExpanded = EditorGUILayout.Foldout(debugExpanded, "Debug:");
+            if (debugExpanded)
+            {
+                DrawDebug();
+            }
+
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.BeginVertical();
+
+            DrawRule(selectedRule, selectedResponse);
+
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.EndHorizontal();
         }
 
         public void DrawRule(Rule rule, EventCall selectedResponse)
