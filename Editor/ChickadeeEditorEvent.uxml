@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="ChickadeeEditorEvent">
+        <ui:Foldout text="MyEvent" value="true" style="min-width: 200px; width: auto;">
+            <ui:VisualElement style="background-color: rgba(255, 255, 255, 0.12);">
+                <ui:TextField picking-mode="Ignore" label="Event name" value="MyEvent" text="MyEvent" binding-path="name" style="height: 18px; width: auto; min-width: 200px;" />
+            </ui:VisualElement>
+        </ui:Foldout>
+    </ui:VisualElement>
+</ui:UXML>

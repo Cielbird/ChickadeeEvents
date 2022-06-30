@@ -9,10 +9,10 @@ namespace ChickadeeEvents
         public List<Fact> facts;
 
 
-        public EventQuery(string eventName, Blackboard blackboard, List<Fact> eventFacts)
+        public EventQuery(string eventName, List<Fact> blackboard, List<Fact> eventFacts)
         {
             this.eventName = eventName;
-            facts = new List<Fact>(blackboard.facts);
+            facts = new List<Fact>(blackboard);
             facts.AddRange(eventFacts);
         }
 

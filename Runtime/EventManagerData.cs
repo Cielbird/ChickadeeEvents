@@ -13,14 +13,46 @@ namespace ChickadeeEvents
     [CreateAssetMenu(fileName = "EventManagerData", menuName = "ChickadeeEvents/EventManagerData", order = 1)]
     public class EventManagerData : ScriptableObject
     {
-        public Blackboard blackboard;
-        public List<RuleList> ruleCollections;
+
+        public List<Fact> facts;
+
+        [System.Serializable]
+        public class EventName
+        {
+            public string name;
+        }
+        public List<EventName> eventNames;
+
+        public List<Rule> rules;
 
         private void Awake()
         {
-            blackboard = new Blackboard();
-            ruleCollections = new List<RuleList>();
-            ruleCollections.Add(new RuleList("Main rules"));
+            facts = new List<Fact>();
+            rules = new List<Rule>();
+        }
+
+        public void SetFact(string key, string value)
+        {
+            foreach (Fact fact in facts)
+            {
+                if (fact.key == key)
+                {
+                    fact.value = value;
+                }
+            }
+            facts.Add(new Fact(key, value));
+        }
+
+        public string GetStringFact(string key)
+        {
+            foreach (Fact fact in facts)
+            {
+                if (fact.key == key)
+                {
+                    return fact.value;
+                }
+            }
+            return null;
         }
     }
 }

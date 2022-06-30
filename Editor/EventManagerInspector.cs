@@ -22,9 +22,9 @@ namespace ChickadeeEvents
             // Add a simple label
             Button button = new Button(() =>
             {
-                EventEditor.SetUpWindow((EventManagerData)serializedObject.FindProperty("data").objectReferenceValue);
+                ChickadeeEditor.ShowWindow();
             });
-            button.text = "Open event editor";
+            button.text = "Open Chickadee editor";
             eventInspector.Add(button);
 
             // Return the finished inspector UI

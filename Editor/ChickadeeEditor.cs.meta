@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: a8e0551d360fc4e15a3c73633bedc41c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - m_EditorAsset: {fileID: 9197481963319205126, guid: 298d3ae80fb41450eabd0bfcb856b3ee, type: 3}
+  - m_FactAsset: {fileID: 9197481963319205126, guid: b731b4e738a564e65a73d9a3e0be1c7a, type: 3}
+  - m_EventAsset: {fileID: 9197481963319205126, guid: 576f4dace069841d8a3f07d5d9749bb9, type: 3}
+  - m_RuleAsset: {fileID: 9197481963319205126, guid: c482b909b083149fbab3027daa5db86d, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

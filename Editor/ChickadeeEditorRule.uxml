@@ -1,0 +1,23 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Foldout text="MyRule" value="true" style="min-width: 200px;">
+        <ui:VisualElement style="background-color: rgba(255, 255, 255, 0.12);">
+            <ui:DropdownField label="TriggerEvent" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
+            <ui:Foldout text="Requirements">
+                <ui:ScrollView>
+                    <ui:ScrollView>
+                        <ui:VisualElement style="flex-direction: row;">
+                            <ui:DropdownField index="2" choices="MyChoice1,MyChoice2,MyChoice3" />
+                            <ui:Label text="=" display-tooltip-when-elided="true" />
+                            <ui:TextField picking-mode="Ignore" value="filler text" text="filler text" multiline="true" style="flex-grow: 0;" />
+                        </ui:VisualElement>
+                    </ui:ScrollView>
+                    <ui:VisualElement style="height: 20px; flex-direction: row;">
+                        <ui:Button text="+" display-tooltip-when-elided="true" style="width: 40px;" />
+                        <ui:Button text="-" display-tooltip-when-elided="true" style="width: 40px;" />
+                    </ui:VisualElement>
+                </ui:ScrollView>
+            </ui:Foldout>
+            <ui:DropdownField label="Event to call" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
+        </ui:VisualElement>
+    </ui:Foldout>
+</ui:UXML>

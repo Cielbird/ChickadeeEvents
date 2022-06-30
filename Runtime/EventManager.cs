@@ -39,32 +39,29 @@ namespace ChickadeeEvents
 
         public void CallEvent(EventCall call, Object caller)
         {
-            EventQuery query = new EventQuery(call.EventName, data.blackboard, call.eventFacts);
+            EventQuery query = new EventQuery(call.EventName, data.facts, call.eventFacts);
 
             debugLog.Add(new EventCallInfo(call, caller, Time.time));
 
             OnCallEvent?.Invoke(query);
 
-            foreach(RuleList ruleCollection in data.ruleCollections)
+            foreach (Rule rule in data.rules)
             {
-                foreach (Rule rule in ruleCollection.rules)
+                if (query.MatchesRule(rule))
                 {
-                    if (query.MatchesRule(rule))
+                    // responses
+                    foreach (var response in rule.responses)
                     {
-                        // responses
-                        foreach (var response in rule.responses)
+                        List<Fact> derefedFacts = new List<Fact>();
+                        foreach (Fact f in response.eventFacts)
                         {
-                            List<Fact> derefedFacts = new List<Fact>();
-                            foreach (Fact f in response.eventFacts)
-                            {
-                                derefedFacts.Add(new Fact(f.key, query.Deref(f.value)));
-                            }
-                            EventCall derefedCall = new EventCall(
-                                            query.Deref(response.EventName),
-                                            derefedFacts);
-
-                            StartCoroutine(CallEventCoroutine(derefedCall, caller));
+                            derefedFacts.Add(new Fact(f.key, query.Deref(f.value)));
                         }
+                        EventCall derefedCall = new EventCall(
+                                        query.Deref(response.EventName),
+                                        derefedFacts);
+
+                        StartCoroutine(CallEventCoroutine(derefedCall, caller));
                     }
                 }
             }
@@ -81,7 +78,7 @@ namespace ChickadeeEvents
         /// </summary>
         public string GetFactVal(string key)
         {
-            return data.blackboard.facts.GetValue(key);
+            return data.GetStringFact(key);
         }
 
         /// <summary>
@@ -89,7 +86,12 @@ namespace ChickadeeEvents
         /// </summary>
         public void SetFactVal(string key, string value)
         {
-            data.blackboard.facts.SetValue(key, value);
+            data.SetFact(key, value);
+        }
+
+        public List<Fact> GetFacts()
+        {
+            return data.facts;
         }
     }
 
