@@ -89,9 +89,9 @@ namespace ChickadeeEvents
             data.SetFact(key, value);
         }
 
-        public List<Fact> GetFacts()
+        public List<string> GetFactNames()
         {
-            return data.facts;
+            return data.facts.ConvertAll(e => e.key);
         }
     }
 
