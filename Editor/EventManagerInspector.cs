@@ -16,7 +16,7 @@ namespace ChickadeeEvents
             // Create a new VisualElement to be the root of our inspector UI
             VisualElement eventInspector = new VisualElement();
 
-            var dataField = new PropertyField(serializedObject.FindProperty("data"));
+            var dataField = new PropertyField(serializedObject.FindProperty("Data"));
             eventInspector.Add(dataField);
 
             // Add a simple label
