@@ -44,7 +44,6 @@ namespace ChickadeeEvents
 
             // log
             log.Add($"[{Time.time}] {call.EventName} ({call.Sender} -> {call.Target})");
-            print($"[{Time.time}] {caller} : {call.EventName}");
             if (log.Count > 30)
                 log.RemoveAt(0);
 

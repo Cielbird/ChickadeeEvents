@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using System.Collections.Generic;
 using System;
+using UnityEngine.SceneManagement;
 
 namespace ChickadeeEvents
 {
@@ -27,11 +28,13 @@ namespace ChickadeeEvents
         {
             ChickadeeEditor wnd = GetWindow<ChickadeeEditor>();
             wnd.titleContent = new GUIContent("ChickadeeEditor");
+            wnd.CreateGUI();
         }
 
         public void CreateGUI()
         {
             // Each editor window contains a root VisualElement object
+            rootVisualElement.Clear();
             VisualElement root = rootVisualElement;
 
             VisualElement editor = m_EditorAsset.Instantiate();
@@ -58,8 +61,6 @@ namespace ChickadeeEvents
             item.Q<Label>().bindingPath = "key";
             return item;
         }
-
-
 
         [MenuItem("GameObject/Chickadee Events/Event Manager")]
         public static GameObject GetEventManagerGameObject()
