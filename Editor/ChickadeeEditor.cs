@@ -17,8 +17,6 @@ namespace ChickadeeEvents
         [SerializeField]
         VisualTreeAsset _editorAsset;
         [SerializeField]
-        VisualTreeAsset _factAsset;
-        [SerializeField]
         VisualTreeAsset _eventAsset;
         [SerializeField]
         VisualTreeAsset _ruleAsset;
@@ -47,19 +45,11 @@ namespace ChickadeeEvents
 
             ListView factListView = editor.Q<ListView>("FactList");
             factListView.Bind(so);
-            factListView.makeItem = MakeFact;
 
             ListView eventListView = editor.Q<ListView>("EventList");
             eventListView.Bind(so);
 
             root.Add(editor);
-        }
-
-        private VisualElement MakeFact()
-        {
-            VisualElement item = _factAsset.CloneTree();
-            item.Q<Label>().bindingPath = "key";
-            return item;
         }
 
         /// <summary>
