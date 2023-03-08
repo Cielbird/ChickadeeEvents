@@ -1,12 +1,21 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ChickadeeEvents
 {
+    /// <summary>
+    /// MonoBehaviour that allows for interaction between the event system and
+    /// other Monobehaviours. When an event is called, if the
+    /// EventListener's GameObject is the sender, the listener will
+    /// trigger any linked Unity events.
+    /// </summary>
     public class EventListener : MonoBehaviour
     {
-        public string listenerName;
-        public List<EventTrigger> eventTriggers;
+        [Obsolete("ListenerName is deprecated, please use " +
+            "gameObject.name instead.")]
+        public string ListenerName;
+        public List<EventTrigger> EventTriggers;
 
         private void OnEnable()
         {
@@ -26,14 +35,14 @@ namespace ChickadeeEvents
 
         void OnCallEvent(EventQuery query)
         {
-            if (query.GetVal("sender") != listenerName)
+            if (query.GetVal("sender") != gameObject.name)
                 return;
 
-            foreach (EventTrigger trigger in eventTriggers)
+            foreach (EventTrigger trigger in EventTriggers)
             {
-                if (trigger.eventName.Equals(query.eventName))
+                if (trigger.EventName.Equals(query.EventName))
                 {
-                    trigger.triggers.Invoke(query);
+                    trigger.Triggers.Invoke(query);
                     return;
                 }
             }

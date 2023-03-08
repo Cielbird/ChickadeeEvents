@@ -5,13 +5,13 @@ namespace ChickadeeEvents
     [Serializable]
     public class Fact
     {
-        public string key;
-        public string value;
+        public string Key;
+        public string Value;
 
         public Fact()
         {
-            key = "";
-            value = "";
+            Key = "";
+            Value = "";
         }
 
         /// <summary>
@@ -19,19 +19,19 @@ namespace ChickadeeEvents
         /// </summary>
         public Fact(Fact otherFact)
         {
-            key = otherFact.key;
-            value = otherFact.value;
+            Key = otherFact.Key;
+            Value = otherFact.Value;
         }
 
         public Fact(string key, string value)
         {
-            this.key = key;
-            this.value = value;
+            this.Key = key;
+            this.Value = value;
         }
 
         public override string ToString()
         {
-            return $"{key} : {value}";
+            return $"{Key} : {Value}";
         }
 
         public override bool Equals(object obj)
@@ -44,13 +44,13 @@ namespace ChickadeeEvents
             else
             {
                 Fact f = (Fact)obj;
-                return key == f.key && value == f.value;
+                return Key == f.Key && Value == f.Value;
             }
         }
 
         public override int GetHashCode()
         {
-            return (key+":"+value).GetHashCode();
+            return (Key+":"+Value).GetHashCode();
         }
     }
 }

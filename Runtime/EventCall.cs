@@ -3,71 +3,90 @@ using UnityEngine;
 
 namespace ChickadeeEvents
 {
+    /// <summary>
+    /// Class that contains an event call in the form of a fact list.
+    /// </summary>
     [System.Serializable]
     public class EventCall
     {
-        public List<Fact> eventFacts;
+        public List<Fact> EventFacts;
 
+        /// <summary>
+        /// Gets the value of the "event_name" fact.
+        /// </summary>
         public string EventName
         {
             get
             {
-                return eventFacts.GetValue("event_name");
+                return EventFacts.GetValue("event_name");
             }
             set
             {
-                eventFacts.SetValue("event_name", value);
+                EventFacts.SetValue("event_name", value);
             }
         }
+
+        /// <summary>
+        /// Gets the value of the "sender" fact. The sender is usually a
+        /// unity Object's name.
+        /// </summary>
         public string Sender
         {
             get
             {
-                return eventFacts.GetValue("sender");
+                return EventFacts.GetValue("sender");
             }
             set
             {
-                eventFacts.SetValue("sender", value);
+                EventFacts.SetValue("sender", value);
             }
         }
+
+        /// <summary>
+        /// Gets the value of the "target" fact. The target is usually a
+        /// unity Object's name.
+        /// </summary>
         public string Target
         {
             get
             {
-                return eventFacts.GetValue("target");
+                return EventFacts.GetValue("target");
             }
             set
             {
-                eventFacts.SetValue("target", value);
+                EventFacts.SetValue("target", value);
             }
         }
 
+        /// <summary>
+        /// Creates a new event call with event name "untitled_event"
+        /// </summary>
         public EventCall()
         {
-            eventFacts = new List<Fact>();
+            EventFacts = new List<Fact>();
             EventName = "untitled_event";
         }
 
         /// <summary>
-        /// Deep copys the other event call
+        /// Deep copies the other event call
         /// </summary>
         public EventCall(EventCall call)
         {
-            eventFacts = new List<Fact>();
-            foreach(Fact otherFact in call.eventFacts)
+            EventFacts = new List<Fact>();
+            foreach(Fact otherFact in call.EventFacts)
             {
-                eventFacts.Add(new Fact(otherFact));
+                EventFacts.Add(new Fact(otherFact));
             }
         }
 
         public EventCall(string eventName, List<Fact> otherEventFacts = null)
         {
-            eventFacts = new List<Fact>();
+            EventFacts = new List<Fact>();
             EventName = eventName;
             if(otherEventFacts != null)
             {
                 foreach (Fact f in otherEventFacts)
-                    eventFacts.Add(f);
+                    EventFacts.Add(f);
             }
         }
 
@@ -83,7 +102,9 @@ namespace ChickadeeEvents
                          string target = null)
                             : this(eventName, null, sender, target) { }
 
-
+        /// <summary>
+        /// Displays the event call's name, sender, and target.
+        /// </summary>
         public override string ToString()
         {
             return $"{EventName} ({Sender} -> {Target})";

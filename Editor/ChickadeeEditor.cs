@@ -9,19 +9,19 @@ using UnityEngine.SceneManagement;
 namespace ChickadeeEvents
 {
     /// <summary>
-    /// An editor made to replace the older EventEditor window
+    /// Editor for event manager data. Allows for in-editor access to facts,
+    /// events, rules, and an event log.
     /// </summary>
     public class ChickadeeEditor : EditorWindow
     {
         [SerializeField]
-        VisualTreeAsset m_EditorAsset;
-
+        VisualTreeAsset _editorAsset;
         [SerializeField]
-        VisualTreeAsset m_FactAsset;
+        VisualTreeAsset _factAsset;
         [SerializeField]
-        VisualTreeAsset m_EventAsset;
+        VisualTreeAsset _eventAsset;
         [SerializeField]
-        VisualTreeAsset m_RuleAsset;
+        VisualTreeAsset _ruleAsset;
 
         [MenuItem("Chickadee/Chickadee Editor")]
         public static void ShowWindow()
@@ -36,10 +36,10 @@ namespace ChickadeeEvents
             // Each editor window contains a root VisualElement object
             rootVisualElement.Clear();
             VisualElement root = rootVisualElement;
+            UnityEngine.Debug.Log(_editorAsset);
+            VisualElement editor = _editorAsset.CloneTree();
 
-            VisualElement editor = m_EditorAsset.Instantiate();
-
-            EventManagerData data = EventManager.Current.data;
+            EventManagerData data = EventManager.Current.Data;
             SerializedObject so = new SerializedObject(data);
 
             editor.Q<Button>("EventLogButton").clicked +=
@@ -57,11 +57,15 @@ namespace ChickadeeEvents
 
         private VisualElement MakeFact()
         {
-            VisualElement item = m_FactAsset.CloneTree();
+            VisualElement item = _factAsset.CloneTree();
             item.Q<Label>().bindingPath = "key";
             return item;
         }
 
+        /// <summary>
+        /// Creates a GameObject with an EventManager added.
+        /// </summary>
+        /// <returns>The GameObject</returns>
         [MenuItem("GameObject/Chickadee Events/Event Manager")]
         public static GameObject GetEventManagerGameObject()
         {
@@ -81,7 +85,7 @@ namespace ChickadeeEvents
                 //plug in the first data file found
                 string guid = AssetDatabase.GUIDToAssetPath(dataFiles[0]);
                 var data = AssetDatabase.LoadAssetAtPath<EventManagerData>(guid);
-                eventManager.data = data;
+                eventManager.Data = data;
             }
             ShowWindow();
             return em;

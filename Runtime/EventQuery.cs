@@ -5,27 +5,27 @@ namespace ChickadeeEvents
 {
     public class EventQuery
     {
-        public string eventName;
-        public List<Fact> facts;
+        public string EventName;
+        public List<Fact> Facts;
 
 
         public EventQuery(string eventName, List<Fact> blackboard, List<Fact> eventFacts)
         {
-            this.eventName = eventName;
-            facts = new List<Fact>(blackboard);
-            facts.AddRange(eventFacts);
+            this.EventName = eventName;
+            Facts = new List<Fact>(blackboard);
+            Facts.AddRange(eventFacts);
         }
 
         public bool MatchesRule(Rule rule)
         {
-            if (rule.eventName != eventName)
+            if (rule.EventName != EventName)
                 return false;
 
-            foreach(Fact criterion in rule.criteria)
+            foreach(Fact criterion in rule.Criteria)
             {
-                Fact queryFact = GetFact(criterion.key);
+                Fact queryFact = GetFact(criterion.Key);
                 if (queryFact == null ||
-                    Deref(criterion.value) != queryFact.value)
+                    Deref(criterion.Value) != queryFact.Value)
                     return false;
             }
             return true;
@@ -42,7 +42,7 @@ namespace ChickadeeEvents
                 UnityEngine.Debug.LogWarning($"Fact with key \"{key}\" not found!");
                 return null;
             }
-            return fact.value;
+            return fact.Value;
         }
 
         /// <summary>
@@ -59,9 +59,9 @@ namespace ChickadeeEvents
 
         public Fact GetFact(string key)
         {
-            foreach (Fact fact in facts)
+            foreach (Fact fact in Facts)
             {
-                if (fact.key == key)
+                if (fact.Key == key)
                     return fact;
             }
             return null;

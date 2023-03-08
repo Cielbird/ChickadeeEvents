@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using ChickadeeEvents.Debug;
 using UnityEngine;
 
 namespace ChickadeeEvents
 {
+    /// <summary>
+    /// Singleton monobehaviour that contains the EventManagerData for the
+    /// scene. Provides the interface for other scripts to access the event
+    /// system.
+    /// </summary>
     public class EventManager : MonoBehaviour
     {
         static EventManager _current;
@@ -20,13 +24,16 @@ namespace ChickadeeEvents
             }
         }
 
+        /// <summary>
+        /// Called whenever a Chickadee Event is called.
+        /// </summary>
         public event System.Action<EventQuery> OnCallEvent;
 
-        public EventManagerData data;
+        public EventManagerData Data;
 
-        public float eventDelay;
+        public float EventDelay;
 
-        public List<string> log = new List<string>();
+        public List<string> Log = new List<string>();
 
         private void Start()
         {
@@ -38,28 +45,33 @@ namespace ChickadeeEvents
             DontDestroyOnLoad(gameObject);
         }
 
+        /// <summary>
+        /// Calls an event
+        /// </summary>
+        /// <param name="call">The event to call</param>
+        /// <param name="caller">The object that is calling this event</param>
         public void CallEvent(EventCall call, Object caller)
         {
-            EventQuery query = new EventQuery(call.EventName, data.facts, call.eventFacts);
+            EventQuery query = new EventQuery(call.EventName, Data.Facts, call.EventFacts);
 
             // log
-            log.Add($"[{Time.time}] {call.EventName} ({call.Sender} -> {call.Target})");
-            if (log.Count > 30)
-                log.RemoveAt(0);
+            Log.Add($"[{Time.time}] {call.EventName} ({call.Sender} -> {call.Target})");
+            if (Log.Count > 30)
+                Log.RemoveAt(0);
 
             OnCallEvent?.Invoke(query);
 
-            foreach (Rule rule in data.rules)
+            // call subsequent events according to rules
+            foreach (Rule rule in Data.Rules)
             {
                 if (query.MatchesRule(rule))
                 {
-                    // responses
-                    foreach (var response in rule.responses)
+                    foreach (var response in rule.Responses)
                     {
                         List<Fact> derefedFacts = new List<Fact>();
-                        foreach (Fact f in response.eventFacts)
+                        foreach (Fact f in response.EventFacts)
                         {
-                            derefedFacts.Add(new Fact(f.key, query.Deref(f.value)));
+                            derefedFacts.Add(new Fact(f.Key, query.Deref(f.Value)));
                         }
                         EventCall derefedCall = new EventCall(
                                         query.Deref(response.EventName),
@@ -73,7 +85,7 @@ namespace ChickadeeEvents
 
         IEnumerator CallEventCoroutine(EventCall call, Object caller)
         {
-            yield return new WaitForSeconds(eventDelay);
+            yield return new WaitForSeconds(EventDelay);
             CallEvent(call, caller);
         }
 
@@ -82,7 +94,7 @@ namespace ChickadeeEvents
         /// </summary>
         public string GetFactVal(string key)
         {
-            return data.GetStringFact(key);
+            return Data.GetStringFact(key);
         }
 
         /// <summary>
@@ -90,12 +102,12 @@ namespace ChickadeeEvents
         /// </summary>
         public void SetFactVal(string key, string value)
         {
-            data.SetFact(key, value);
+            Data.SetFact(key, value);
         }
 
         public List<string> GetFactNames()
         {
-            return data.facts.ConvertAll(e => e.key);
+            return Data.Facts.ConvertAll(e => e.Key);
         }
     }
 

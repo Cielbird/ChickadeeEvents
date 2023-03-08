@@ -6,34 +6,40 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class EventLogWindow : EditorWindow
+namespace ChickadeeEvents
 {
-    [MenuItem("Chickadee/Event Log")]
-    public static void ShowWindow()
-    {
-        EventLogWindow wnd = GetWindow<EventLogWindow>();
-        wnd.titleContent = new GUIContent("Event Log");
-    }
-
-    public void CreateGUI()
-    {
-        // Each editor window contains a root VisualElement object
-        VisualElement root = rootVisualElement;
-
-        IMGUIContainer imgui = new IMGUIContainer(imguiHandler);
-        root.Add(imgui);
-    }
-
     /// <summary>
-    /// Creates an IMGUI based event log
+    /// Editor window to display the event log
     /// </summary>
-    private void imguiHandler()
+    public class EventLogWindow : EditorWindow
     {
-        string text = "";
-        foreach(string entry in EventManager.Current.log)
+        [MenuItem("Chickadee/Event Log")]
+        public static void ShowWindow()
         {
-            text += entry + '\n';
+            EventLogWindow wnd = GetWindow<EventLogWindow>();
+            wnd.titleContent = new GUIContent("Event Log");
         }
-        GUILayout.Label(text);
+
+        public void CreateGUI()
+        {
+            // Each editor window contains a root VisualElement object
+            VisualElement root = rootVisualElement;
+
+            IMGUIContainer imgui = new IMGUIContainer(imguiHandler);
+            root.Add(imgui);
+        }
+
+        /// <summary>
+        /// Creates an IMGUI based event log
+        /// </summary>
+        private void imguiHandler()
+        {
+            string text = "";
+            foreach (string entry in EventManager.Current.Log)
+            {
+                text += entry + '\n';
+            }
+            GUILayout.Label(text);
+        }
     }
 }

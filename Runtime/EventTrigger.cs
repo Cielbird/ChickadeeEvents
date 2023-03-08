@@ -5,7 +5,7 @@ namespace ChickadeeEvents
     [System.Serializable]
     public class EventTrigger
     {
-        public string eventName;
-        public UnityEvent<EventQuery> triggers;
+        public string EventName;
+        public UnityEvent<EventQuery> Triggers;
     }
 }

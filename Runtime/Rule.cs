@@ -9,30 +9,30 @@ namespace ChickadeeEvents
         /// <summary>
         /// The event that will trigger the reactions
         /// </summary>
-        public string eventName;
+        public string EventName;
 
         /// <summary>
         /// What criteria have to be met
         /// </summary>
-        public List<Fact> criteria;
+        public List<Fact> Criteria;
 
         /// <summary>
         /// What events will be called if criteria are met
         /// </summary>
-        public List<EventCall> responses;
+        public List<EventCall> Responses;
 
 
         public override string ToString()
         {
-            return $"{eventName} ({criteria.Count})";
+            return $"{EventName} ({Criteria.Count})";
         }
 
 
         public Rule()
         {
-            eventName = "untitled_event";
-            criteria = new List<Fact>();
-            responses = new List<EventCall>();
+            EventName = "untitled_event";
+            Criteria = new List<Fact>();
+            Responses = new List<EventCall>();
         }
 
         /// <summary>
@@ -40,17 +40,17 @@ namespace ChickadeeEvents
         /// </summary>
         public Rule(Rule otherRule)
         {
-            eventName = otherRule.eventName;
-            criteria = new List<Fact>();
-            foreach(Fact c in otherRule.criteria)
+            EventName = otherRule.EventName;
+            Criteria = new List<Fact>();
+            foreach(Fact c in otherRule.Criteria)
             {
-                criteria.Add(new Fact(c));
+                Criteria.Add(new Fact(c));
             }
-            responses = new List<EventCall>();
-            foreach (EventCall c in otherRule.responses)
+            Responses = new List<EventCall>();
+            foreach (EventCall c in otherRule.Responses)
             {
                 EventCall newCall = new EventCall(c);
-                responses.Add(newCall);
+                Responses.Add(newCall);
             }
         }
     }

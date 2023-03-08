@@ -2,15 +2,18 @@
 
 namespace ChickadeeEvents
 {
+    /// <summary>
+    /// Provides utility functions for searching in fact lists
+    /// </summary>
     public static class FactExtentions
     {
         public static string GetValue(this List<Fact> facts, string key)
         {
             foreach (Fact fact in facts)
             {
-                if (fact.key == key)
+                if (fact.Key == key)
                 {
-                    return fact.value;
+                    return fact.Value;
                 }
             }
             return null;
@@ -27,7 +30,7 @@ namespace ChickadeeEvents
         public static void SetValue(this List<Fact> facts, string key,
                                     string value)
         {
-            Fact match = facts.Find(e => e.key == key);
+            Fact match = facts.Find(e => e.Key == key);
             if(match == null)
             {
                 if(value != null)
@@ -39,7 +42,7 @@ namespace ChickadeeEvents
                 facts.Remove(match);
                 return;
             }
-            match.value = value;
+            match.Value = value;
         }
 
         /// <summary>
@@ -51,7 +54,7 @@ namespace ChickadeeEvents
         {
             foreach (Fact fact in facts)
             {
-                if (fact.key == key)
+                if (fact.Key == key)
                     return fact;
             }
             return null;

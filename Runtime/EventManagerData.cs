@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using ChickadeeEvents;
-using ChickadeeEvents.Debug;
 using UnityEngine;
 
 /// <summary>
@@ -14,42 +13,43 @@ namespace ChickadeeEvents
     public class EventManagerData : ScriptableObject
     {
 
-        public List<Fact> facts;
+        public List<Fact> Facts;
 
         [System.Serializable]
         public class EventName
         {
             public string name;
         }
-        public List<EventName> eventNames;
+        public List<EventName> EventNames;
 
-        public List<Rule> rules;
+        public List<Rule> Rules;
 
         private void Awake()
         {
-            facts = new List<Fact>();
-            rules = new List<Rule>();
+            Facts = new List<Fact>();
+            Rules = new List<Rule>();
         }
-
+        // TODO refactor fact-setting and fat-getting. There is code everywhere
+        // that acomplishes this objective
         public void SetFact(string key, string value)
         {
-            foreach (Fact fact in facts)
+            foreach (Fact fact in Facts)
             {
-                if (fact.key == key)
+                if (fact.Key == key)
                 {
-                    fact.value = value;
+                    fact.Value = value;
                 }
             }
-            facts.Add(new Fact(key, value));
+            Facts.Add(new Fact(key, value));
         }
 
         public string GetStringFact(string key)
         {
-            foreach (Fact fact in facts)
+            foreach (Fact fact in Facts)
             {
-                if (fact.key == key)
+                if (fact.Key == key)
                 {
-                    return fact.value;
+                    return fact.Value;
                 }
             }
             return null;
