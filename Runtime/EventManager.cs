@@ -24,8 +24,9 @@ namespace ChickadeeEvents
 
         public EventManagerData data;
 
-        public float debugEventDelay;
-        public List<EventCallInfo> debugLog = new List<EventCallInfo>();
+        public float eventDelay;
+
+        public List<string> log = new List<string>();
 
         private void Start()
         {
@@ -41,7 +42,11 @@ namespace ChickadeeEvents
         {
             EventQuery query = new EventQuery(call.EventName, data.facts, call.eventFacts);
 
-            debugLog.Add(new EventCallInfo(call, caller, Time.time));
+            // log
+            log.Add($"[{Time.time}] {call.EventName} ({call.Sender} -> {call.Target})");
+            print($"[{Time.time}] {caller} : {call.EventName}");
+            if (log.Count > 30)
+                log.RemoveAt(0);
 
             OnCallEvent?.Invoke(query);
 
@@ -69,7 +74,7 @@ namespace ChickadeeEvents
 
         IEnumerator CallEventCoroutine(EventCall call, Object caller)
         {
-            yield return new WaitForSeconds(debugEventDelay);
+            yield return new WaitForSeconds(eventDelay);
             CallEvent(call, caller);
         }
 

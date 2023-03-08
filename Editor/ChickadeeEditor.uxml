@@ -1,5 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:Label text="Chickadee Editor" display-tooltip-when-elided="true" style="font-size: 15px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+    <ui:VisualElement style="flex-direction: row; justify-content: space-between;">
+        <ui:Label text="Chickadee Editor" display-tooltip-when-elided="true" style="font-size: 15px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+        <ui:Button text="Event Log" display-tooltip-when-elided="true" name="EventLogButton" />
+    </ui:VisualElement>
     <ui:VisualElement style="flex-direction: row;">
         <ui:VisualElement focusable="true" style="flex-shrink: 0; flex-grow: 1; max-width: 400px;">
             <ui:Label text="Facts" display-tooltip-when-elided="true" style="border-left-color: rgb(0, 174, 255); border-right-color: rgb(0, 174, 255); border-top-color: rgb(0, 174, 255); border-bottom-color: rgb(0, 174, 255); border-bottom-width: 3px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />

@@ -39,6 +39,9 @@ namespace ChickadeeEvents
             EventManagerData data = EventManager.Current.data;
             SerializedObject so = new SerializedObject(data);
 
+            editor.Q<Button>("EventLogButton").clicked +=
+                EventLogWindow.ShowWindow;
+
             ListView factListView = editor.Q<ListView>("FactList");
             factListView.Bind(so);
             factListView.makeItem = MakeFact;
