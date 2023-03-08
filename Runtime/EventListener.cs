@@ -35,7 +35,7 @@ namespace ChickadeeEvents
 
         void OnCallEvent(EventQuery query)
         {
-            if (query.GetVal("sender") != gameObject.name)
+            if (query.Facts.GetValue("sender") != gameObject.name)
                 return;
 
             foreach (EventTrigger trigger in EventTriggers)
