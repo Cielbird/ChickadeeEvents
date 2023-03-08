@@ -33,5 +33,19 @@ namespace ChickadeeEvents
         {
             return $"{key} : {value}";
         }
+
+        public override bool Equals(object obj)
+        {
+            //Check for null and compare run-time types.
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                Fact f = (Fact)obj;
+                return key == f.key && value == f.value;
+            }
+        }
     }
 }
