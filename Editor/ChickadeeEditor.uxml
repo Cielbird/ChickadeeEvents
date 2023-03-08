@@ -6,11 +6,11 @@
     <ui:VisualElement style="flex-direction: row;">
         <ui:VisualElement focusable="true" style="flex-shrink: 0; flex-grow: 1; max-width: 400px;">
             <ui:Label text="Facts" display-tooltip-when-elided="true" style="border-left-color: rgb(0, 174, 255); border-right-color: rgb(0, 174, 255); border-top-color: rgb(0, 174, 255); border-bottom-color: rgb(0, 174, 255); border-bottom-width: 3px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
-            <ui:ListView focusable="true" name="FactList" binding-path="facts" virtualization-method="DynamicHeight" reorderable="true" show-add-remove-footer="true" show-bound-collection-size="false" show-border="true" style="min-width: 200px;" />
+            <ui:ListView focusable="true" name="FactList" binding-path="Facts" virtualization-method="DynamicHeight" reorderable="true" show-add-remove-footer="true" show-bound-collection-size="false" show-border="true" style="min-width: 200px;" />
         </ui:VisualElement>
         <ui:VisualElement focusable="true" style="flex-shrink: 0; flex-grow: 1; max-width: 400px;">
             <ui:Label text="Events" display-tooltip-when-elided="true" style="border-bottom-width: 3px; border-left-color: rgb(231, 65, 28); border-right-color: rgb(231, 65, 28); border-top-color: rgb(231, 65, 28); border-bottom-color: rgb(231, 65, 28); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
-            <ui:ListView focusable="true" name="EventList" binding-path="eventNames" virtualization-method="DynamicHeight" reorderable="true" show-add-remove-footer="true" show-bound-collection-size="false" show-border="true" style="min-width: 200px;" />
+            <ui:ListView focusable="true" name="EventList" binding-path="EventNames" virtualization-method="DynamicHeight" reorderable="true" show-add-remove-footer="true" show-bound-collection-size="false" show-border="true" style="min-width: 200px;" />
         </ui:VisualElement>
         <ui:VisualElement focusable="true" style="flex-shrink: 0; flex-grow: 1; max-width: 400px;">
             <ui:Label text="Rules" display-tooltip-when-elided="true" style="border-bottom-width: 3px; border-left-color: rgb(20, 168, 105); border-right-color: rgb(20, 168, 105); border-top-color: rgb(20, 168, 105); border-bottom-color: rgb(20, 168, 105); padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />

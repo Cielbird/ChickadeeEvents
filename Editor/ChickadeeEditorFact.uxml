@@ -1,9 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:Foldout text="MyFact" value="true" style="min-width: 200px; width: auto;">
-        <ui:VisualElement style="background-color: rgba(255, 255, 255, 0.12); flex-direction: row; justify-content: flex-start;">
-            <ui:TextField picking-mode="Ignore" value="MyFact" binding-path="key" style="height: 18px; min-width: 100px;" />
-            <ui:Label text=" = " display-tooltip-when-elided="true" />
-            <ui:TextField picking-mode="Ignore" value="MyFact" binding-path="value" style="height: 18px; min-width: 100px;" />
-        </ui:VisualElement>
-    </ui:Foldout>
+    <ui:VisualElement style="background-color: rgba(255, 255, 255, 0.12); flex-direction: row; justify-content: flex-start;">
+        <ui:TextField picking-mode="Ignore" value="MyFact" binding-path="key" style="height: 18px; min-width: 100px;" />
+        <ui:Label text=" = " display-tooltip-when-elided="true" />
+        <ui:TextField picking-mode="Ignore" value="MyFact" binding-path="value" style="height: 18px; min-width: 100px;" />
+    </ui:VisualElement>
 </ui:UXML>
