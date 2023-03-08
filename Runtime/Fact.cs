@@ -47,5 +47,10 @@ namespace ChickadeeEvents
                 return key == f.key && value == f.value;
             }
         }
+
+        public override int GetHashCode()
+        {
+            return (key+":"+value).GetHashCode();
+        }
     }
 }
