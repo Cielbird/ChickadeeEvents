@@ -12,9 +12,6 @@ namespace ChickadeeEvents
     /// </summary>
     public class EventListener : MonoBehaviour
     {
-        [Obsolete("ListenerName is deprecated, please use " +
-            "gameObject.name instead.")]
-        public string ListenerName;
         public List<EventTrigger> EventTriggers;
 
         private void OnEnable()

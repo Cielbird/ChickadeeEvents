@@ -15,12 +15,7 @@ namespace ChickadeeEvents
 
         public List<Fact> Facts;
 
-        [System.Serializable]
-        public class EventName
-        {
-            public string name;
-        }
-        public List<EventName> EventNames;
+        public List<string> EventNames;
 
         public List<Rule> Rules;
 
