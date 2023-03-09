@@ -14,13 +14,6 @@ namespace ChickadeeEvents
     /// </summary>
     public class ChickadeeEditor : EditorWindow
     {
-        [SerializeField]
-        VisualTreeAsset _editorAsset;
-        [SerializeField]
-        VisualTreeAsset _eventAsset;
-        [SerializeField]
-        VisualTreeAsset _ruleAsset;
-
         [MenuItem("Chickadee/Chickadee Editor")]
         public static void ShowWindow()
         {
@@ -34,8 +27,9 @@ namespace ChickadeeEvents
             // Each editor window contains a root VisualElement object
             rootVisualElement.Clear();
             VisualElement root = rootVisualElement;
-            UnityEngine.Debug.Log(_editorAsset);
-            VisualElement editor = _editorAsset.CloneTree();
+            var path = "Packages/com.cielbird.chickadee_events/Editor/ChickadeeEditor.uxml";
+            var editorAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(path);
+            VisualElement editor = editorAsset.CloneTree();
 
             EventManagerData data = EventManager.Current.Data;
             SerializedObject so = new SerializedObject(data);
