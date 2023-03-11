@@ -94,7 +94,7 @@ namespace ChickadeeEvents
         /// </summary>
         public string GetFactVal(string key)
         {
-            return Data.GetStringFact(key);
+            return Data.Facts.GetValue(key);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace ChickadeeEvents
         /// </summary>
         public void SetFactVal(string key, string value)
         {
-            Data.SetFact(key, value);
+            Data.Facts.SetValue(key, value);
         }
 
         public List<string> GetFactNames()

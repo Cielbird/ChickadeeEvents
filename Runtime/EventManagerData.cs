@@ -24,30 +24,5 @@ namespace ChickadeeEvents
             Facts = new List<Fact>();
             Rules = new List<Rule>();
         }
-        // TODO refactor fact-setting and fat-getting. There is code everywhere
-        // that acomplishes this objective
-        public void SetFact(string key, string value)
-        {
-            foreach (Fact fact in Facts)
-            {
-                if (fact.Key == key)
-                {
-                    fact.Value = value;
-                }
-            }
-            Facts.Add(new Fact(key, value));
-        }
-
-        public string GetStringFact(string key)
-        {
-            foreach (Fact fact in Facts)
-            {
-                if (fact.Key == key)
-                {
-                    return fact.Value;
-                }
-            }
-            return null;
-        }
     }
 }
