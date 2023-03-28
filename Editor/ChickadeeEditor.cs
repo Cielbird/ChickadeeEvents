@@ -1,10 +1,7 @@
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEditor.UIElements;
-using System.Collections.Generic;
-using System;
-using UnityEngine.SceneManagement;
 
 namespace ChickadeeEvents
 {
